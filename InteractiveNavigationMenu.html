@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive Navigation Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 2000px;
+            background: linear-gradient(to bottom, #e0f7fa, #80deea);
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #00796b;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s, color 0.3s;
+            z-index: 1000;
+        }
+        .navbar.scrolled {
+            background-color: #004d40;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .navbar a:hover {
+            background-color: #004d40;
+            color: #e0f7fa;
+        }
+        .navbar .active {
+            background-color: #004d40; 
+            color: #e0f7fa;
+        }
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+        }
+        .navbar-links {
+            display: flex;
+        }
+        @media (max-width: 768px) {
+            .navbar-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background-color: #00796b;
+            }
+            .navbar-links.active {
+                display: flex;
+            }
+            .menu-toggle {
+                display: block;
+                background: none;
+                border: none;
+                color: white;
+                font-size: 24px;
+            }
+        }
+        .content {
+            padding-top: 70px;
+        }
+        section {
+            padding: 50px;
+            height: 600px;
+            border-bottom: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar" id="navbar">
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <div class="navbar-links" id="navbarLinks">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </div>
+    <div class="content">
+        <section id="home">
+            <h1>Welcome to Our Website</h1>
+            <p>Scroll down to see the effect on the navigation menu.</p>
+        </section>
+        <section id="about">
+            <h2>About Us</h2>
+            <p>At ABC Company, we are dedicated to transforming ideas into reality. Founded on the principles of innovation, integrity, and collaboration, our team of passionate professionals works tirelessly to deliver exceptional products and services that meet the evolving needs of our clients. With a commitment to excellence and a focus on sustainability, we strive to create lasting impact in our community and beyond. Join us on our journey as we continue to push boundaries and redefine what’s possible.</p>
+        </section>
+        <section id="services">
+            <h2>Our Services</h2>
+            <p>At ABC Company, we offer a comprehensive range of services designed to meet the diverse needs of our clients. From cutting-edge technology solutions to personalized consulting, our expert team is committed to delivering high-quality results that drive success. We pride ourselves on our customer-centric approach, ensuring that each service is tailored to align with your unique goals and challenges. Whether you’re looking to enhance efficiency, innovate processes, or achieve sustainable growth, we are here to partner with you every step of the way, providing the expertise and support you need to thrive in today’s competitive landscape.             </p>
+        </section>
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>We’d love to hear from you! At ABC company, we value open communication and are here to assist you with any questions or inquiries you may have. Whether you need more information about our services, want to discuss a potential project, or simply wish to share your feedback, our dedicated team is ready to help. Please reach out to us through the contact form on our website, give us a call, or connect with us via email. Your thoughts are important to us, and we look forward to connecting with you soon!</p>
+        </section>
+    </div>
+
+    <script>
+        const navbar = document.getElementById('navbar');
+        const navbarLinks = document.get ElementById('navbarLinks');
+        const menuToggle = document.getElementById('menuToggle');
+
+        // Add an event listener for scroll
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            highlightActiveLink();
+        });
+
+        // Smooth scrolling and active link highlighting
+        document.querySelectorAll('.navbar a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        function highlightActiveLink() {
+            const sections = document.querySelectorAll('section');
+            let scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    const currentId = section.getAttribute('id');
+                    document.querySelectorAll('.navbar a').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${currentId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+
+        // Toggle mobile menu
+        menuToggle.addEventListener('click', () => {
+            navbarLinks.classList.toggle('active');
+        });
+    </script>
+
+</body>
+</html>
